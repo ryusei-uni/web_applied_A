@@ -44,6 +44,9 @@ function update(dt){
         }
         chenge_color = "#"+(Math.floor(randomR)).toString(16) + (Math.floor(randomG)).toString(16) + (Math.floor(randomR)).toString(16);
         isclush =false
+
+        vx /= 1.2;
+        vy /= 1.2;
     }
     
     
@@ -85,6 +88,11 @@ function draw(){
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
+
+    ctx.font ="23px serif"
+    ctx.fillStyle ="#FFFFFF";
+    ctx.fillText("はねた回数:"+bouncing_count,10,24);
+    
 }
 
 function loop(now){
