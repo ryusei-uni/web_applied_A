@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 
 
 const CONFIG = {
-    GRAVITY:2000,
+    GRAVITY:100,
     MOVE_SPEED:240,
     STOP_SPEED: 250,
     BOUNCE:0.25,
