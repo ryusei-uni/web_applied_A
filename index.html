@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 5 canvas</title>
+    <title>課題アクセスページ</title>
     <style>
-        body{
+        body {
             background-color: #0b1020;
-            color:#e8eeff;
+            color: #e8eeff;
             font-family: sans-serif;
-
+            padding: 20px;
         }
-
-        canvas{
+        canvas {
             background-color: #111a33;
-            border:1px solid #8899cc;
-
+            border: 1px solid #8899cc;
+            display: block;
+            margin-bottom: 20px;
         }
-        #ctrl-list{
+        
+        .ctrl-btn {
             display: inline-block;
             padding: 12px 24px;
             background-color: #3b82f6;
@@ -29,18 +30,18 @@
             text-decoration: none;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin-right: 12px; 
+        }
+        
+        .ctrl-btn:hover {
+            background-color: #2563eb;
         }
     </style>
 </head>
 <body>
-    <h1>Week 5 canvas</h1>
-    <p id="info-log">-</p>
-    <button id="ctrl-list">操作の確認</button>
-    <div id="ctrl-index"></div>
-    
-    <p id="info">-</p>
-    <canvas id="stage" width="640" height="360"></canvas>
 
-    <script src="5-A_bouncelab.js"></script>
+    <a class="ctrl-btn" href="5_stage.html">課題5-A_stage</a>
+    <a class="ctrl-btn" href="6_stage.html">課題6-A_stage</a>
+
 </body>
 </html>
