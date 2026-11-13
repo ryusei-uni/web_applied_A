@@ -5,14 +5,17 @@ const ctx = canvas.getContext("2d");
 
 const CONFIG = {
     GRAVITY:2000,
-    MOVE_SPEED:240,
-    STOP_SPEED: 250,
-    BOUNCE:0.25,
-    FRICTION: 0.88,
     JUMP_SPEED:700,
+    MOVE_SPEED:240,
     MAX_JUMPS:2,
-    FALL_GRAVITY_RATE:2
+    FALL_GRAVITY_RATE:2,
+    
 };
+
+const BOUNCE = 0.45;
+const STOP_SPEED = 250;
+const FRICTION = 0.88;
+
 
 const TARGET_HEIGHT = 64;
 
@@ -52,7 +55,7 @@ function ctrl(dt){
         player.vx = -CONFIG.MOVE_SPEED ;
     }
     else if(player.isGrounded){
-         player.vx *=  CONFIG.FRICTION ** (dt * 60);
+         player.vx *=  FRICTION ** (dt * 60);
     }
     player.x += player.vx * dt;
 }
@@ -86,8 +89,8 @@ function canvaswall(){
 function collideWithFloor(){
     if(player.y + player.h > floor.y){
         player.y = floor.y - player.h;
-        if(player.vy > CONFIG.STOP_SPEED){
-            player.vy = -player.vy * CONFIG.BOUNCE;
+        if(player.vy > STOP_SPEED){
+            player.vy = -player.vy * BOUNCE;
             player.isGrounded = false;
         }else{
             player.vy = 0;
