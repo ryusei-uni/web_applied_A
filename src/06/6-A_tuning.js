@@ -4,12 +4,12 @@ const ctx = canvas.getContext("2d");
 
 
 const CONFIG = {
-    GRAVITY:2000,
-    JUMP_SPEED:700,
-    MOVE_SPEED:240,
+    GRAVITY:1160,
+    JUMP_SPEED:560,
+    MOVE_SPEED:200,
     MAX_JUMPS:2,
     FALL_GRAVITY_RATE:2,
-    
+    HIP_DROP_RATE :5
 };
 
 const BOUNCE = 0.45;
@@ -20,6 +20,10 @@ const FRICTION = 0.88;
 const TARGET_HEIGHT = 64;
 
 const player = {x:80,y:20,w:32,h:32,vy:0,vx:0,isGrounded:false,jumpsLeft:CONFIG.MAX_JUMPS};
+
+const enemys = [];
+
+const enemy = {};
 
 const floor = {x:0,y:320,w:640,h:40};
 
@@ -56,6 +60,13 @@ function ctrl(dt){
     }
     else if(player.isGrounded){
          player.vx *=  FRICTION ** (dt * 60);
+    }
+
+    if(keys["ArrowDown"]){
+        CONFIG.FALL_GRAVITY_RATE = CONFIG.HIP_DROP_RATE;
+
+    }else{
+         CONFIG.FALL_GRAVITY_RATE = 2;
     }
     player.x += player.vx * dt;
 }
@@ -141,7 +152,7 @@ function draw(){
 
     ctx.fillStyle = "#e8eeff";
     ctx.font = "20px monospace";
-    ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft, 10, 20);
+    ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "     FALL_RETA = "+ CONFIG.FALL_GRAVITY_RATE, 10, 20);
 
     // 目印の線（跳んだ高さをくらべる）
     ctx.fillStyle = "#ff6b6b";
