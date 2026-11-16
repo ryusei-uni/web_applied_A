@@ -4,6 +4,7 @@ function update(dt){
 
 
     updataPlayer(dt);
+    updateEnemies(dt);
 }
 
 function draw(){
@@ -13,6 +14,7 @@ function draw(){
     // ctx.fillStyle = "#7ef5e1";
      drawPlayer();
    
+     drawEnemies();
 
     // 目印の線（跳んだ高さをくらべる）
     ctx.fillStyle = "#ff6b6b";

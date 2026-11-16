@@ -8,9 +8,9 @@ CONFIG_ENEMY ={
 };
 
 
-const enemys = [];
+let enemys = [];
 
-const enemy_a = {x:80,y:40,w:32,h:32,vx:0,vy:0,isAttack:false,isGrounde:false,isCrash:false,isDamage:false};
+
 
 function drawEnemy(enemy){
     ctx.fillStyle = enemy.isDamage ?"#f90055" : "#00f955";
@@ -41,8 +41,18 @@ function enemy_Damaged(enemy,player){
     }
 }
 
-function draw_Enemy_spown(enemys){
-    
+function draw_Enemy_spown(x,vx,y,vy,){
+ const enemy = {
+    x:x,y:y,
+    w:32,h:32,
+    vx:vx,vy:vy,
+    isGrounde:false,
+    isCrash:false,
+    isAttack:false,
+    isDamage:false,
+    isAlive:true
+};   
+ return enemy;
 }
 
 function enemys_ai(dt,enemy){
