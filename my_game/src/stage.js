@@ -3,7 +3,7 @@ const ctx = canvas.getContext("2d");
 
 const BOUNCE = 0.45;
 const STOP_SPEED = 250;
-const FRICTION = 0.88;
+const FRICTION = 0;
 
 
 const TARGET_HEIGHT = 64;

@@ -9,7 +9,7 @@ const CONFIG = {
 
 
 
-const player = {x:80,y:20,w:32,h:32,vy:0,vx:0,isGrounded:false,jumpsLeft:CONFIG.MAX_JUMPS,isDamage:false,isAttack:false};
+const player = {x:80,y:20,w:32,h:32,vy:0,vx:0,isGrounded:false,jumpsLeft:CONFIG.MAX_JUMPS,isDamage:false,isAttack:false,state:"idle"};
 
 
 

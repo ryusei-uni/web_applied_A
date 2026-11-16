@@ -7,9 +7,21 @@ const CONFIG = {
     HIP_DROP_RATE :5
 };
 
+const playerImg = new Image();
+playerImg.src = "img/7-3_bird.png";
+const FRAME_SIZE = 32;
+const FRAME_TIME = 0.12;
 
+const ANIMS = {
+  idle: { row: 0, count: 2 },
+  run:  { row: 1, count: 4 },
+  jump: { row: 2, count: 2 },
+  fall: { row: 3, count: 2 },
+};
 
-const player = {x:80,y:20,w:32,h:32,vy:0,vx:0,isGrounded:false,jumpsLeft:CONFIG.MAX_JUMPS};
+const STATE_COLORS = { idle: "#7ef5e1", run: "#6dd3ff", jump: "#ffd166", fall: "#ff9999" };
+
+const player = {x:80,y:20,w:32,h:32,vy:0,vx:0,isGrounded:false,jumpsLeft:CONFIG.MAX_JUMPS,state:"idle", frameIndex: 0, frameTimer: 0,facing:1 };
 
 
 
@@ -37,7 +49,18 @@ document.addEventListener("keyup", (e) => {
   keys[e.code] = false;
 });
 
-
+function decidestate(){
+    if(!player.isGrounded){
+        if(player.vy < 0){
+            return "jump";
+        }
+        return "fall";
+    }
+    if(player.vx !== 0){
+        return "run";
+    }
+    return "idle";
+}
 
 function ctrl(dt){
     if(keys["ArrowRight"]){
@@ -46,7 +69,7 @@ function ctrl(dt){
     else if(keys["ArrowLeft"]){
         player.vx = -CONFIG.MOVE_SPEED ;
     }
-    else if(player.isGrounded){
+     else if(player.isGrounded){
          player.vx *=  FRICTION ** (dt * 60);
     }
 
@@ -111,12 +134,25 @@ function collideWithplatform(prevBottom){
 }
 
 function drawPlayer(){
-    ctx.fillStyle = player.isGrounded ? "#7ef5e1" : "#ffd166";
-    ctx.fillRect(player.x,player.y,player.w,player.h);
+    // ctx.fillStyle = player.isGrounded ? "#7ef5e1" : "#ffd166";
+    // ctx.fillStyle = STATE_COLORS[player.state];
+    // ctx.fillRect(player.x,player.y,player.w,player.h);
+
+    
+    const sx = player.frameIndex * FRAME_SIZE;
+    const sy = ANIMS[player.state].row * FRAME_SIZE;
+
+    ctx.save();
+    ctx.translate(player.x + player.w /2,player.y + player.h/2);
+    ctx.scale(player.facing,1);
+    ctx.drawImage(playerImg,sx,sy,FRAME_SIZE,FRAME_SIZE,-player.w / 2,-player.h / 2,player.w,player.h);
+    ctx.restore();
 
     ctx.fillStyle = "#e8eeff";
   ctx.font = "14px monospace";
-  ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + " isDamage = " + player.isDamage , 10, 20);
+  ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + " vx = "+ player.vx, 10, 20);
+  ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "   state = " + player.state, 10, 40);
+  ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "   state = " + player.state + "   frameIndex = " + player.frameIndex, 10, 60);
    ctx.fillStyle = "#e8eeff";
     ctx.font = "20px monospace";
     // ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "     FALL_RETA = "+ CONFIG.FALL_GRAVITY_RATE, 10, 40);
@@ -130,8 +166,31 @@ function updataPlayer(dt){
     // player.vy += GRAVITY*dt;
     player.y += player.vy*dt;
 
+    const newState = decidestate();
 
+    if(newState !== player.state){
+        player.state = newState;
+        player.frameIndex = 0;
+        player.frameTimer = 0;
+    }
+   
+    player.frameTimer += dt;
+    if(player.frameTimer >= FRAME_TIME){
+        player.frameIndex = (player.frameIndex + 1) % ANIMS[player.state].count;
+        player.frameTimer = 0;
+    }
     
+    if(player.vx > 0){
+        player.facing = 1;
+    }
+
+    if(player.vx < 0){
+        player.facing = -1;
+    }
+
+    //  player.facing = player.vx > 0 ? 1 : -1;
+
+     
     ctrl(dt);
 
    

@@ -3,7 +3,7 @@
 function update(dt){
 
 
-    // updataPlayer(dt);
+    updataPlayer(dt);
 }
 
 function draw(){
