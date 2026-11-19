@@ -4,7 +4,9 @@ const CONFIG = {
     MOVE_SPEED:200,
     MAX_JUMPS:2,
     FALL_GRAVITY_RATE:2,
-    HIP_DROP_RATE :5
+    HIP_DROP_RATE :5,
+    MAX_HP:3,
+    HIT_TIME:1
 };
 
 const playerImg = new Image();
@@ -21,7 +23,7 @@ const ANIMS = {
 
 const STATE_COLORS = { idle: "#7ef5e1", run: "#6dd3ff", jump: "#ffd166", fall: "#ff9999" };
 
-const player = {x:80,y:20,w:32,h:32,vy:0,vx:0,isGrounded:false,jumpsLeft:CONFIG.MAX_JUMPS,state:"idle", frameIndex: 0, frameTimer: 0,facing:1 };
+const player = {x:80,y:20,w:32,h:32,vy:0,vx:0,hp:CONFIG.MAX_HP,hittimer:0,isGrounded:false,jumpsLeft:CONFIG.MAX_JUMPS,state:"idle", frameIndex: 0, frameTimer: 0,facing:1 };
 
 
 
@@ -84,13 +86,6 @@ function ctrl(dt){
 }
 
 
-function aabb(a,b){
-    return  a.x < b.x + b.w &&
-            a.x + a.w > b.x &&
-            a.y < b.y + b.h &&
-            a.y + a.h > b.y ;
-           
-}
 
 function ResetJumpMax(){
     if (player.isGrounded){
@@ -137,7 +132,9 @@ function drawPlayer(){
     // ctx.fillStyle = player.isGrounded ? "#7ef5e1" : "#ffd166";
     // ctx.fillStyle = STATE_COLORS[player.state];
     // ctx.fillRect(player.x,player.y,player.w,player.h);
-
+    if(player.hittimer > 0){
+        ctx.globalAlpha = 0.4;
+    }
     
     const sx = player.frameIndex * FRAME_SIZE;
     const sy = ANIMS[player.state].row * FRAME_SIZE;
@@ -148,11 +145,13 @@ function drawPlayer(){
     ctx.drawImage(playerImg,sx,sy,FRAME_SIZE,FRAME_SIZE,-player.w / 2,-player.h / 2,player.w,player.h);
     ctx.restore();
 
+    ctx.globalAlpha = 1;
+
     ctx.fillStyle = "#e8eeff";
   ctx.font = "14px monospace";
   ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + " vx = "+ player.vx, 10, 20);
   ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "   state = " + player.state, 10, 40);
-  ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "   state = " + player.state + "   frameIndex = " + player.frameIndex, 10, 60);
+  ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "   state = " + player.state + "   frameIndex = " + player.frameIndex + "  hp = " + player.hp + "  hittimer = " + player.hittimer, 10, 60);
    ctx.fillStyle = "#e8eeff";
     ctx.font = "20px monospace";
     // ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "     FALL_RETA = "+ CONFIG.FALL_GRAVITY_RATE, 10, 40);
@@ -180,6 +179,10 @@ function updataPlayer(dt){
         player.frameTimer = 0;
     }
     
+    if(player.hittimer > 0){
+        player.hittimer -= dt;
+    }
+
     if(player.vx > 0){
         player.facing = 1;
     }
@@ -203,3 +206,8 @@ function updataPlayer(dt){
 
     ResetJumpMax();
 }
+
+/*
+
+
+*/
