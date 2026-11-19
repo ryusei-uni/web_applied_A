@@ -23,11 +23,30 @@ const ANIMS = {
 
 const STATE_COLORS = { idle: "#7ef5e1", run: "#6dd3ff", jump: "#ffd166", fall: "#ff9999" };
 
-const player = {x:80,y:20,w:32,h:32,vy:0,vx:0,hp:CONFIG.MAX_HP,hittimer:0,isGrounded:false,jumpsLeft:CONFIG.MAX_JUMPS,state:"idle", frameIndex: 0, frameTimer: 0,facing:1 };
+const player = {
+    x:80,y:20,
+    w:32,h:32,
+    vy:0,vx:0,
+    hp:CONFIG.MAX_HP,
+    hittimer:0,
+    isGrounded:false,
+    jumpsLeft:CONFIG.MAX_JUMPS,
+    state:"idle",
+     frameIndex: 0, frameTimer: 0,
+     facing:1 
+    };
 
 
 
-
+function resetPlayer() {
+  player.x = 80;
+  player.y = 20;
+  player.vx = 0;
+  player.vy = 0;
+  player.jumpsLeft = CONFIG.MAX_JUMPS;
+  player.hp = CONFIG.MAX_HP;
+  player.hitTimer = 0;
+};
 
 
 const keys = {};

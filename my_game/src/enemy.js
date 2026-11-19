@@ -3,20 +3,22 @@
   }
 
 let enemies = [];
-// const one = new createEnemy(200, 80);
-const one = createEnemy(200, 80);
-// enemies.push(one);
-// enemies.push(one);
-// enemies.push(one);
-enemies.push(createEnemy(200,80));
-enemies.push(createEnemy(380,-120));
-enemies.push(createEnemy(540,60));
+function resetEnemies() {
+  enemies = [];
+  enemies.push(createEnemy(200, 80));
+  enemies.push(createEnemy(380, -120));
+  enemies.push(createEnemy(540, 60));
+  // ↑ 授業でくじの敵を足した人は、その行（const special = … から enemies.push(special); まで）もここへ
+}
+
+
 
 function collideWithEnemies(prevBottom) {
   for (const enemy of enemies) {
     if (aabb(player, enemy) && prevBottom <= enemy.y && player.vy > 0) {
       enemy.alive = false;            // 倒した（状態を書き換える）
       player.vy = -CONFIG.JUMP_SPEED / 2;    // 踏んだら、少し跳ねる
+      score ++;
     }else if(aabb(player,enemy) && player.hittimer <= 0){
       player.hp -= 1;
       player.hittimer = CONFIG.HIT_TIME;

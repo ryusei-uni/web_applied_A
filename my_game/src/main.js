@@ -1,9 +1,19 @@
-
 let gameState = "title";
+let score = 0;
+
+function resetGame() {
+  resetPlayer();
+  resetEnemies();
+  score = 0;
+}
+function startGame() {
+  resetGame();
+  gameState = "play";
+}
 
 document.addEventListener("keydown", (e)=>{
-if(e.code === "Enter" && gameState === "title"){
-  gameState = "play";
+if(e.code === "Enter" && (gameState === "title" || gameState === "gameover")){
+  startGame();
 }
 if(e.code ==="KeyP"){
   if(gameState === "play"){
@@ -21,10 +31,13 @@ function update(dt){
       }
 
       const prevBottom = player.y + player.h;
-
+      
     updataPlayer(dt);
     updateEnemies(dt);
     collideWithEnemies(prevBottom);
+    if(player.hp <= 0){
+        gameState = "gameover";
+      }
 }
 
 function drawMessage(text, sub) {
@@ -36,6 +49,15 @@ function drawMessage(text, sub) {
   ctx.fillText(sub, canvas.width / 2, 190);
   ctx.textAlign = "left";   // ほかの文字のために戻す
   ctx.font = "14px monospace";
+}
+
+function drawHud(){
+  ctx.fillStyle ="#e8eeff";
+  ctx.fillText("SCORE" + score,500,20);
+  ctx.strokeStyle = "#e8eeff";
+  ctx.strokeRect(500,30,120,12);
+  ctx.fillStyle = "#7ef5e1";
+  ctx.fillRect(500,30,120 *player.hp / CONFIG.MAX_HP,12);
 }
 
 function draw(){
@@ -53,6 +75,8 @@ function draw(){
    
     drawStage();
 
+    drawHud();
+
     if (gameState === "title") {
     drawMessage("my game", "Enter で始める");
     return;                 // タイトルでは、敵とプレイヤーは描かない
@@ -62,6 +86,9 @@ function draw(){
   drawPlayer();
   if(gameState ==="pause"){
     drawMessage("PAUSE","Pでツヅケル");
+  }
+  if(gameState === "gameover"){
+    drawMessage("GAME OVER","Enter でもう一度");
   }
 }
 
