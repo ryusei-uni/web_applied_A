@@ -1,12 +1,14 @@
 const MAX_ENEMISES = 6;
 
 function createEnemy(x,vx){
-      return {x:x,y:floor.y-32,w:32,h:32,vx:vx,alive:true,id:null};
+      return {x:x,y:floor.y-32,w:32,h:32,vx:vx,alive:true};
   }
 
 let enemies = [];
 let spawnTimer = 0;
 let nextSpawn = 2;
+let moveTime = 1.0;
+let stopTime = 1.0;
 function resetEnemies() {
   enemies = [];
   enemies.push(createEnemy(200, 80));
@@ -55,10 +57,15 @@ function collideWithEnemies(prevBottom) {
 function updateEnemies(dt){
     for(const enemy of enemies){
         // enemy.x += enemy.vx * dt;
-        
+         
 
-      
+      let cycle = moveTime + stopTime;
+      let currentTime = playTime % cycle;
+
+      if(currentTime < moveTime){
+       
         enemy.x = enemy.x + enemy.vx * dt;
+      }
         if(enemy.x < 0){
             enemy.x = 0;
             enemy.vx = -enemy.vx;

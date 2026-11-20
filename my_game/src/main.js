@@ -1,10 +1,11 @@
 let gameState = "title";
 let score = 0;
-
+let playTime = 0;
 function resetGame() {
   resetPlayer();
   resetEnemies();
   score = 0;
+  playTime = 0;
 }
 function startGame() {
   resetGame();
@@ -31,7 +32,7 @@ function update(dt){
       }
 
       const prevBottom = player.y + player.h;
-      
+      playTime += dt;
     updataPlayer(dt);
     updateEnemies(dt);
     spawnEnemies(dt);
