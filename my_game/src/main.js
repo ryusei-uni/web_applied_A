@@ -34,6 +34,8 @@ function update(dt){
       
     updataPlayer(dt);
     updateEnemies(dt);
+    spawnEnemies(dt);
+
     collideWithEnemies(prevBottom);
     if(player.hp <= 0){
         gameState = "gameover";
