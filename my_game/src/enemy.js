@@ -20,7 +20,7 @@ function resetEnemies() {
 }
 
 function spawnEnemies(dt){
-  spawnTimer =+ dt;
+  spawnTimer += dt;
 
   if(spawnTimer >= nextSpawn){
     if(enemies.length < MAX_ENEMISES){

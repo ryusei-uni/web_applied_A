@@ -168,9 +168,10 @@ function drawPlayer(){
 
     ctx.fillStyle = "#e8eeff";
   ctx.font = "14px monospace";
-  ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + " vx = "+ player.vx, 10, 20);
-  ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "   state = " + player.state, 10, 40);
-  ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "   state = " + player.state + "   frameIndex = " + player.frameIndex + "  hp = " + player.hp + "  hittimer = " + player.hittimer, 10, 60);
+//   ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + " vx = "+ player.vx, 10, 20);
+//   ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "   state = " + player.state, 10, 40);
+//   ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "   state = " + player.state + "   frameIndex = " + player.frameIndex + "  hp = " + player.hp + "  hittimer = " + player.hittimer, 10, 60);
+  ctx.fillText("spown time :"+ spawnTimer,10,20);
    ctx.fillStyle = "#e8eeff";
     ctx.font = "20px monospace";
     // ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "     FALL_RETA = "+ CONFIG.FALL_GRAVITY_RATE, 10, 40);

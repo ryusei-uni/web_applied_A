@@ -34,8 +34,8 @@ function update(dt){
       const prevBottom = player.y + player.h;
       playTime += dt;
     updataPlayer(dt);
-    updateEnemies(dt);
     spawnEnemies(dt);
+    updateEnemies(dt);
 
     collideWithEnemies(prevBottom);
     if(player.hp <= 0){
