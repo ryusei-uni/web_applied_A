@@ -16,7 +16,7 @@ function resetEnemies() {
   enemies.push(createEnemy(540, 60));
   spawn = 0;
   nextSpawn = 2;
-  // ↑ 授業でくじの敵を足した人は、その行（const special = … から enemies.push(special); まで）もここへ
+ 
 }
 
 function spawnEnemies(dt){

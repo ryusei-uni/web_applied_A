@@ -26,6 +26,14 @@ if(e.code ==="KeyP"){
 }
 });
 
+document.addEventListener("pointerdown", ()=>{
+if((gameState === "title" || gameState === "gameover")){
+  startGame();
+}
+});
+
+
+
 function update(dt){
      if (gameState !== "play") {
         return;                 // プレイ中でなければ、動かさない
@@ -82,6 +90,7 @@ function draw(){
 
     if (gameState === "title") {
     drawMessage("my game", "Enter で始める");
+    drawAim();
     return;                 // タイトルでは、敵とプレイヤーは描かない
   }
   
@@ -93,6 +102,7 @@ function draw(){
   if(gameState === "gameover"){
     drawMessage("GAME OVER","Enter でもう一度");
   }
+  drawAim();
 }
 
 let last = performance.now();
