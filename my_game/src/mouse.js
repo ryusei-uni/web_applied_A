@@ -4,7 +4,9 @@ canvas.addEventListener ("pointermove",(e) =>{
 const rect = canvas.getBoundingClientRect();
 
 mouse.x = e.clientX - rect.left;
-mouse.y = e.clientY - rect.top;
+// mouse.x = e.clientX ;
+mouse.y = e.clientY - rect.top;s
+// mouse.y = e.clientY ;
 });
 
 function drawAim(){
