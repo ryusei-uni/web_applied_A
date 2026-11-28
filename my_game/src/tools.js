@@ -5,3 +5,8 @@ function aabb(a,b){
             a.y + a.h > b.y ;
            
 }
+
+
+function degToRad(degrees) {
+  return degrees * (Math.PI / 180);
+}

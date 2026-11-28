@@ -4,8 +4,11 @@ const CONFIG = {
     MOVE_SPEED:200,
     MAX_JUMPS:2,
     FALL_GRAVITY_RATE:2,
-    HIP_DROP_RATE :5,
+    HIP_DROP_SPEED:780,
+    HIP_DROP_BOUNCE:420,
     MAX_HP:3,
+    HURTBOX_INSET_X:5,
+    HURTBOX_INSET_Y:4,
     HIT_TIME:1
 };
 
@@ -33,10 +36,24 @@ const player = {
     jumpsLeft:CONFIG.MAX_JUMPS,
     state:"idle",
      frameIndex: 0, frameTimer: 0,
-     facing:1 
+     facing:1 ,
+     isAttack:false,
+     impact:null,
+     invincible:false
     };
 
 
+
+function getPlayerHurtbox() {
+  const insetX = CONFIG.HURTBOX_INSET_X;
+  const insetY = CONFIG.HURTBOX_INSET_Y;
+  return {
+    x: player.x + insetX,
+    y: player.y + insetY,
+    w: player.w - 2 * insetX,
+    h: player.h - 2 * insetY
+  };
+}
 
 function resetPlayer() {
   player.x = 80;
@@ -45,7 +62,10 @@ function resetPlayer() {
   player.vy = 0;
   player.jumpsLeft = CONFIG.MAX_JUMPS;
   player.hp = CONFIG.MAX_HP;
-  player.hitTimer = 0;
+  player.hittimer = 0;
+  player.isGrounded = false;
+  player.isAttack = false;
+  player.impact = null;
 };
 
 
@@ -56,9 +76,17 @@ document.addEventListener("keydown",(e)=>{
     
     keys[e.code] = true;
     
-    if(e.code === "Space" && player.jumpsLeft > 0){
+    if (gameState !== "play" || e.repeat) return;
+
+    if (e.code === "ArrowDown" && !player.isGrounded && !player.isAttack) {
+        player.isAttack = true;
+        player.vy = CONFIG.HIP_DROP_SPEED;
+    }
+
+    if(e.code === "Space" && player.jumpsLeft > 0 && !player.isAttack){
         player.vy = -CONFIG.JUMP_SPEED;
         player.jumpsLeft -= 1;
+        player.isGrounded = false;
     }
     
     // if(e.code === "Space" ){
@@ -94,13 +122,6 @@ function ctrl(dt){
          player.vx *=  FRICTION ** (dt * 60);
     }
 
-    if(keys["ArrowDown"]){
-        CONFIG.FALL_GRAVITY_RATE = CONFIG.HIP_DROP_RATE;
-        player.isAttack = true;
-    }else{
-        CONFIG.FALL_GRAVITY_RATE = 2;
-        player.isAttack = false;
-    }
     player.x += player.vx * dt;
 }
 
@@ -126,7 +147,7 @@ function canvaswall(object){
 function collideWithFloor(object,palt){
     if(object.y + object.h > palt.y){
         object.y = palt.y - object.h;
-        if(object.vy > STOP_SPEED){
+        if(object.vy > STOP_SPEED && !object.isAttack){
             object.vy = -object.vy * BOUNCE;
             object.isGrounded = false;
         }else{
@@ -147,7 +168,35 @@ function collideWithplatform(prevBottom){
     }
 }
 
+function finishHipDrop() {
+    player.isAttack = false;
+    player.impact = { x: player.x + player.w / 2, y: player.y + player.h, age: 0 };
+}
+
+function drawHipDropEffect() {
+    ctx.save();
+    if (player.isAttack) {
+        ctx.fillStyle = "#ffc28c";
+        ctx.globalAlpha = 0.75;
+        ctx.fillRect(player.x + 5, player.y - 15, 3, 14);
+        ctx.fillRect(player.x + 14, player.y - 26, 4, 24);
+        ctx.fillRect(player.x + 24, player.y - 11, 3, 10);
+    }
+    if (player.impact) {
+        const { x, y, age } = player.impact;
+        const progress = age / 0.24;
+        ctx.globalAlpha = 1 - progress;
+        ctx.strokeStyle = "#ffd29c";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(x, y - 2, 8 + 28 * progress, 3 + 6 * progress, 0, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+    ctx.restore();
+}
+
 function drawPlayer(){
+    drawHipDropEffect();
     // ctx.fillStyle = player.isGrounded ? "#7ef5e1" : "#ffd166";
     // ctx.fillStyle = STATE_COLORS[player.state];
     // ctx.fillRect(player.x,player.y,player.w,player.h);
@@ -171,7 +220,7 @@ function drawPlayer(){
 //   ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + " vx = "+ player.vx, 10, 20);
 //   ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "   state = " + player.state, 10, 40);
 //   ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "   state = " + player.state + "   frameIndex = " + player.frameIndex + "  hp = " + player.hp + "  hittimer = " + player.hittimer, 10, 60);
-  ctx.fillText("spown time :"+ spawnTimer,10,20);
+//   ctx.fillText("spown time :"+ spawnTimer,10,20);
    ctx.fillStyle = "#e8eeff";
     ctx.font = "20px monospace";
     // ctx.fillText("vy = " + player.vy.toFixed(0) + "   jumpsLeft = " + player.jumpsLeft + "     FALL_RETA = "+ CONFIG.FALL_GRAVITY_RATE, 10, 40);
@@ -181,7 +230,7 @@ function drawPlayer(){
 function updataPlayer(dt){
     const prevBottom = player.y + player.h;
     const g = player.vy > 0 ? CONFIG.GRAVITY * CONFIG.FALL_GRAVITY_RATE : CONFIG.GRAVITY;
-    player.vy = player.vy + g * dt;
+    if (!player.isAttack) player.vy += g * dt;
     // player.vy += GRAVITY*dt;
     player.y += player.vy*dt;
 
@@ -201,6 +250,11 @@ function updataPlayer(dt){
     
     if(player.hittimer > 0){
         player.hittimer -= dt;
+    }
+
+    if (player.impact) {
+        player.impact.age += dt;
+        if (player.impact.age >= 0.24) player.impact = null;
     }
 
     if(player.vx > 0){
@@ -223,6 +277,8 @@ function updataPlayer(dt){
     collideWithFloor(player,floor);
 
     collideWithplatform(prevBottom);
+
+    if (player.isAttack && player.isGrounded) finishHipDrop();
 
     ResetJumpMax();
 }

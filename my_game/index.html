@@ -3,31 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>week 6 stage</title>
+    <title>夕空ダイブ</title>
     <style>
-         body {
-        background-color: #0b1020;
-        color: #e8eeff;
-        font-family: sans-serif;
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 48px 20px;
+        background: radial-gradient(ellipse at top, #332044, #120e21 70%);
+        color: #fff2de;
+        font-family: system-ui, sans-serif;
+        min-height: 100vh;
+      }
+      main { max-width: 720px; margin: 0 auto; }
+      h1 { margin: 0 0 14px; font-size: 1.4rem; letter-spacing: .12em; }
+      .frame {
+        padding: 6px;
+        background: #1b142d;
+        border: 1px solid #795674;
+        border-radius: 12px;
+        box-shadow: 0 18px 48px #0a0618a0;
       }
       canvas {
-        background-color: #111a33;
-        border: 1px solid #8899cc;
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 6px;
+        image-rendering: pixelated;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 22px;
+        padding: 0;
+        list-style: none;
+        color: #e4c9dd;
+        font-size: .875rem;
+      }
+      kbd {
+        background: #32213e;
+        border: 1px solid #795674;
+        border-radius: 4px;
+        padding: 2px 6px;
+        color: #fff2de;
       }
     </style>
 </head>
   <body>
-    <h1>Week 8 stage</h1>
-    <canvas id="stage" width="640" height="360"></canvas>
-    <p id="info"></p>
+    <main>
+      <h1>夕空ダイブ</h1>
+      <div class="frame">
+        <canvas id="stage" width="640" height="360" aria-label="夕空ダイブのゲーム画面"></canvas>
+        <div id="debug-console" style="display: none; position: fixed; bottom: 10px; left: 10px; width: 400px; background: rgba(0, 0, 0, 0.8); color: #0f0; font-family: monospace; padding: 10px; border: 1px solid #0f0;">
+        <div id="console-log" style="max-height: 120px; overflow-y: auto; margin-bottom: 5px; font-size: 12px;"></div>
+        <input id="console-input" type="text" placeholder="コマンドを入力 (例: spawn flyly)" style="width: 100%; background: #111; color: #fff; border: 1px solid #555; padding: 4px; outline: none;">
+</div>
+
+      </div>
+      <ul class="controls" aria-label="操作方法">
+        <li><kbd>←</kbd> <kbd>→</kbd> 移動</li>
+        <li><kbd>Space</kbd> 二段ジャンプ</li>
+        <li><kbd>↓</kbd> 空中でヒップドロップ</li>
+        <li><kbd>P</kbd> 一時停止</li>
+      </ul>
+    </main>
 
     <!-- 動かす js：課題ごとに、ここのファイル名を書き換える -->
     <script src="src/tools.js"></script>
     <script src="src/stage.js"></script>
-    
+    <script src="src/item.js"></script>
     <script src="src/player.js"></script>
+    <script src="src/bullet.js"></script>
     <script src="src/enemy.js"></script>
     <script src="src/mouse.js"></script>
     <script src="src/main.js"></script>
+    <script src="src/command.js"></script>
   </body>
 </html>

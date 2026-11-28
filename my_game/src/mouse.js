@@ -3,10 +3,13 @@ const mouse = {x: -100, y:-100};
 canvas.addEventListener ("pointermove",(e) =>{
 const rect = canvas.getBoundingClientRect();
 
-mouse.x = e.clientX - rect.left;
-// mouse.x = e.clientX ;
-mouse.y = e.clientY - rect.top;s
-// mouse.y = e.clientY ;
+mouse.x = (e.clientX - rect.left) * canvas.width / rect.width;
+mouse.y = (e.clientY - rect.top) * canvas.height / rect.height;
+});
+
+canvas.addEventListener("pointerleave", () => {
+  mouse.x = -100;
+  mouse.y = -100;
 });
 
 function drawAim(){
