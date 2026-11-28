@@ -114,9 +114,6 @@ function drawHud() {
       ctx.fillRect(x, 26, width * ratio, 10);
     }
   }
-}
-
-
   const remaining = streakDeadline - playTime;
   if (remaining > 0) {
     ctx.fillStyle = "#241831ee";
@@ -131,6 +128,7 @@ function drawHud() {
     ctx.fillStyle = "#ffcc98";
     ctx.fillRect(238, 40, 164 * remaining / STREAK_WINDOW_SECONDS, 3);
   }
+}
 
 function drawHitboxes() {
   ctx.save();
@@ -170,13 +168,13 @@ function draw(){
   drawBullet(ctx);
   drawPlayer();
   if (showHitboxes) drawHitboxes();
-  drawHud();
   if(gameState ==="pause"){
     drawMessage("一時停止", "P キーで再開");
   }
   if(gameState === "gameover"){
     drawMessage("ゲームオーバー", "Enter キー / クリックでもう一度");
   }
+  drawHud();
   drawAim();
 }
 
